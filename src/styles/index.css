@@ -6,21 +6,4 @@
 @tailwind utilities;
 
 /* Custom styles */
-.bg-darkBlue {
-  @apply bg-blue-800;
-}
-.bg-lightGray {
-  @apply bg-gray-100;
-}
-.text-darkGray {
-  @apply text-gray-800;
-}
-.text-gold {
-  @apply text-yellow-500;
-}
-.bg-gold {
-  @apply bg-yellow-500;
-}
-.bg-mutedGold {
-  @apply bg-yellow-400;
-}
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');

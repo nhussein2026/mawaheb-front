@@ -12,7 +12,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     login(state, action) {
-      console.log("Login reducer called with action payload:", action.payload);
+      // console.log("Login reducer called with action payload:", action.payload);
       state.isLoggedIn = true;
       localStorage.setItem('isLoggedIn', 'true');
       state.token = action.payload.token;
@@ -20,7 +20,7 @@ const authSlice = createSlice({
       state.user = action.payload.user;
       localStorage.setItem('user', JSON.stringify(action.payload.user));
       console.log("Updated state:", state);
-      console.log("LocalStorage token:", localStorage.getItem('token'));
+      // console.log("LocalStorage token:", localStorage.getItem('token'));
     },
     logout(state) {
       state.isLoggedIn = false;
