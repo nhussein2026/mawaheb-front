@@ -16,6 +16,8 @@ import Note from "./pages/Note";
 import StudentAchievement from "./pages/Achievement";
 import StudentCertificate from "./pages/Certificate";
 import Header from "./components/layout/Header";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -32,9 +34,11 @@ function App() {
         <Route path="/student/courses" element={<StudentCourse />} />
         <Route path="/student/events" element={<StudentEvent />} />
         <Route path="/student/tickets" element={<Ticket />} />
-        <Route path="/student/notes" element={<Note />} />
+        <Route path="/notes" element={<Note />} />
         <Route path="/student/achievements" element={<StudentAchievement />} />
         <Route path="/student/certificates" element={<StudentCertificate />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
       <Footer />
     </div>
