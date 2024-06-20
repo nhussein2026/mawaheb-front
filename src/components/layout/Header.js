@@ -5,6 +5,7 @@ import { logout } from "../../features/user/authSlice";
 
 const Header = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -86,6 +87,15 @@ const Header = () => {
                     >
                       Settings
                     </NavLink>
+                    {user && user.role === 'Admin' && (
+                      <NavLink
+                        to="/admindashboard"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
+                        onClick={() => setDropdownOpen(false)}
+                      >
+                        Admin Dashboard
+                      </NavLink>
+                    )}
                     <button
                       onClick={handleLogout}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"

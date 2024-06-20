@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 
 const NotePage = () => {
   const [notes, setNotes] = useState([]);
-  console.log("this is notes inside notepage: ", notes)
   const [formData, setFormData] = useState({ title: '', content: '' });
   const [selectedNote, setSelectedNote] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -21,7 +20,6 @@ const NotePage = () => {
           },
         });
         const data = await response.json();
-        console.log("these are data fetch notes: ", data)
         if (Array.isArray(data)) {
           setNotes(data);
         } else {

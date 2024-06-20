@@ -18,6 +18,8 @@ import StudentCertificate from "./pages/Certificate";
 import Header from "./components/layout/Header";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import Difficulties from "./pages/Difficulties";
+import AdminDashboard from "./pages/adminDashboard/AdminDashboard";
 
 function App() {
   return (
@@ -37,7 +39,9 @@ function App() {
         <Route path="/notes" element={<Note />} />
         <Route path="/student/achievements" element={<StudentAchievement />} />
         <Route path="/student/certificates" element={<StudentCertificate />} />
+        <Route path="/student/difficulties" element={<Difficulties />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
       <Footer />

@@ -13,6 +13,7 @@ const Sidebar = ({ userType }) => {
     { to: '/notes', label: 'Notes' },
     { to: '/student/achievements', label: 'Achievements' },
     { to: '/student/certificates', label: 'Certificates' },
+    { to: '/student/difficulties', label: 'difficulties' },
   ];
 
   return (

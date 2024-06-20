@@ -1,32 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-const Event = () => {
-  const [events, setEvents] = useState([]);
-  const [formData, setFormData] = useState({ title: '', description: '', photo: null });
-  const [selectedEvent, setSelectedEvent] = useState(null);
+const DifficultyPage = () => {
+  const [difficulties, setDifficulties] = useState([]);
+  const [formData, setFormData] = useState({ title: '', description: '' });
+  const [selectedDifficulty, setSelectedDifficulty] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const token = useSelector((state) => state.auth.token);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchDifficulties = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/events`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/difficulties`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
         });
         const data = await response.json();
-        setEvents(data);
+        setDifficulties(data);
       } catch (error) {
-        console.error('Error fetching events:', error);
-        setError('Failed to load events');
+        console.error('Error fetching difficulties:', error);
+        setError('Failed to load difficulties');
       }
     };
 
-    fetchEvents();
+    fetchDifficulties();
   }, [token]);
 
   const handleInputChange = (e) => {
@@ -34,99 +34,88 @@ const Event = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileChange = (e) => {
-    setFormData({ ...formData, photo: e.target.files[0] });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const form = new FormData();
-    Object.keys(formData).forEach((key) => {
-      form.append(key, formData[key]);
-    });
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/events`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/difficulties`, {
         method: 'POST',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: form,
+        body: JSON.stringify(formData),
       });
       const data = await response.json();
-      setEvents([...events, data.event]);
-      setFormData({ title: '', description: '', photo: null });
+      setDifficulties([...difficulties, data.difficulty]);
+      setFormData({ title: '', description: '' });
       setShowForm(false);
     } catch (error) {
-      console.error('Error creating event:', error);
-      setError('Failed to create event');
+      console.error('Error creating difficulty:', error);
+      setError('Failed to create difficulty');
     }
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    const form = new FormData();
-    Object.keys(formData).forEach((key) => {
-      form.append(key, formData[key]);
-    });
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/events/${selectedEvent._id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/difficulties/${selectedDifficulty._id}`, {
         method: 'PUT',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: form,
+        body: JSON.stringify(formData),
       });
       const data = await response.json();
-      setEvents(events.map((evt) => (evt._id === data.event._id ? data.event : evt)));
-      setFormData({ title: '', description: '', photo: null });
-      setSelectedEvent(null);
+      setDifficulties(difficulties.map((diff) => (diff._id === data.difficulty._id ? data.difficulty : diff)));
+      setFormData({ title: '', description: '' });
+      setSelectedDifficulty(null);
       setShowForm(false);
     } catch (error) {
-      console.error('Error updating event:', error);
-      setError('Failed to update event');
+      console.error('Error updating difficulty:', error);
+      setError('Failed to update difficulty');
     }
   };
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/events/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/difficulties/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       if (response.ok) {
-        setEvents(events.filter((evt) => evt._id !== id));
+        setDifficulties(difficulties.filter((diff) => diff._id !== id));
       } else {
-        setError('Failed to delete event');
+        setError('Failed to delete difficulty');
       }
     } catch (error) {
-      console.error('Error deleting event:', error);
-      setError('Failed to delete event');
+      console.error('Error deleting difficulty:', error);
+      setError('Failed to delete difficulty');
     }
   };
 
-  const handleEdit = (event) => {
-    setSelectedEvent(event);
+  const handleEdit = (difficulty) => {
+    setSelectedDifficulty(difficulty);
     setFormData({
-      title: event.title || '',
-      description: event.description || '',
-      photo: null,
+      title: difficulty.title || '',
+      description: difficulty.description || '',
     });
     setShowForm(true);
   };
 
   const handleAddNew = () => {
-    setSelectedEvent(null);
-    setFormData({ title: '', description: '', photo: null });
+    setSelectedDifficulty(null);
+    setFormData({ title: '', description: '' });
     setShowForm(true);
   };
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-4xl text-darkGray font-bold mb-6">Events</h1>
+      <h1 className="text-4xl text-darkGray font-bold mb-6">Difficulties</h1>
       {error && <p className="text-red-500 mb-4">{error}</p>}
 
       {!showForm && (
@@ -134,16 +123,16 @@ const Event = () => {
           onClick={handleAddNew}
           className="mb-6 px-4 py-2 bg-darkGray text-white rounded-md hover:bg-gray-700"
         >
-          Add New Event
+          Add New Difficulty
         </button>
       )}
 
       {showForm && (
         <div className="bg-white p-6 rounded-lg shadow-md mb-6">
           <h2 className="text-2xl text-darkGray font-semibold mb-4">
-            {selectedEvent ? 'Edit Event' : 'Create Event'}
+            {selectedDifficulty ? 'Edit Difficulty' : 'Create Difficulty'}
           </h2>
-          <form onSubmit={selectedEvent ? handleUpdate : handleSubmit} encType="multipart/form-data">
+          <form onSubmit={selectedDifficulty ? handleUpdate : handleSubmit}>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700">Title</label>
               <input
@@ -166,21 +155,11 @@ const Event = () => {
                 required
               ></textarea>
             </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Event Photo</label>
-              <input
-                type="file"
-                name="photo"
-                onChange={handleFileChange}
-                className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-                accept="image/*"
-              />
-            </div>
             <button
               type="submit"
               className="px-4 py-2 bg-darkGray text-white rounded-md hover:bg-gray-700"
             >
-              {selectedEvent ? 'Update' : 'Create'}
+              {selectedDifficulty ? 'Update' : 'Create'}
             </button>
             <button
               onClick={() => setShowForm(false)}
@@ -192,27 +171,20 @@ const Event = () => {
         </div>
       )}
 
-      {Array.isArray(events) && events.length > 0 ? (
+      {Array.isArray(difficulties) && difficulties.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {events.map((event) => (
-            <div key={event._id} className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl text-darkGray font-semibold mb-2">{event?.title || 'No title'}</h3>
-              <p className="text-gray-600 mb-4">{event?.description || 'No description'}</p>
-              {event.photo && (
-                <img
-                  src={`${process.env.REACT_APP_API_URL}/${event.photo}`}
-                  alt={event.title}
-                  className="mb-4 w-full h-auto rounded-md"
-                />
-              )}
+          {difficulties.map((difficulty) => (
+            <div key={difficulty._id} className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl text-darkGray font-semibold mb-2">{difficulty?.title || 'No title'}</h3>
+              <p className="text-gray-600 mb-4">{difficulty?.description || 'No description'}</p>
               <button
-                onClick={() => handleEdit(event)}
+                onClick={() => handleEdit(difficulty)}
                 className="mr-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
               >
                 Edit
               </button>
               <button
-                onClick={() => handleDelete(event._id)}
+                onClick={() => handleDelete(difficulty._id)}
                 className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700"
               >
                 Delete
@@ -221,10 +193,10 @@ const Event = () => {
           ))}
         </div>
       ) : (
-        <p>No events found.</p>
+        <p>No difficulties found.</p>
       )}
     </div>
   );
 };
 
-export default Event;
+export default DifficultyPage;

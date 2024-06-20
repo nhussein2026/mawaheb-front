@@ -1,18 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 const CoursePage = () => {
   const [courses, setCourses] = useState([]);
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    course_image: null,
-  });
+  const [formData, setFormData] = useState({ title: '', description: '', course_image: null });
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const token = useSelector((state) => state.auth.token);
   const [error, setError] = useState(null);
-  const [imageErrors, setImageErrors] = useState({});
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -35,18 +30,19 @@ const CoursePage = () => {
   }, [token]);
 
   const handleInputChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormData({
-      ...formData,
-      [name]: files ? files[0] : value,
-    });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, course_image: e.target.files[0] });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formDataToSend = new FormData();
+    const form = new FormData();
     Object.keys(formData).forEach((key) => {
-      formDataToSend.append(key, formData[key]);
+      form.append(key, formData[key]);
     });
 
     try {
@@ -55,15 +51,11 @@ const CoursePage = () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        body: formDataToSend,
+        body: form,
       });
       const data = await response.json();
       setCourses([...courses, data.course]);
-      setFormData({
-        title: '',
-        description: '',
-        course_image: null,
-      });
+      setFormData({ title: '', description: '', course_image: null });
       setShowForm(false);
     } catch (error) {
       console.error('Error creating course:', error);
@@ -73,9 +65,9 @@ const CoursePage = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    const formDataToSend = new FormData();
+    const form = new FormData();
     Object.keys(formData).forEach((key) => {
-      formDataToSend.append(key, formData[key]);
+      form.append(key, formData[key]);
     });
 
     try {
@@ -84,15 +76,11 @@ const CoursePage = () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        body: formDataToSend,
+        body: form,
       });
       const data = await response.json();
-      setCourses(courses.map((course) => (course._id === data.updatedCourse._id ? data.updatedCourse : course)));
-      setFormData({
-        title: '',
-        description: '',
-        course_image: null,
-      });
+      setCourses(courses.map((crs) => (crs._id === data.course._id ? data.course : crs)));
+      setFormData({ title: '', description: '', course_image: null });
       setSelectedCourse(null);
       setShowForm(false);
     } catch (error) {
@@ -110,7 +98,7 @@ const CoursePage = () => {
         },
       });
       if (response.ok) {
-        setCourses(courses.filter((course) => course._id !== id));
+        setCourses(courses.filter((crs) => crs._id !== id));
       } else {
         setError('Failed to delete course');
       }
@@ -123,27 +111,16 @@ const CoursePage = () => {
   const handleEdit = (course) => {
     setSelectedCourse(course);
     setFormData({
-      title: course.title,
-      description: course.description,
+      title: course.title || '',
+      description: course.description || '',
       course_image: null,
     });
     setShowForm(true);
   };
 
-  const handleImageError = (courseId) => {
-    setImageErrors((prevErrors) => ({
-      ...prevErrors,
-      [courseId]: true,
-    }));
-  };
-
   const handleAddNew = () => {
     setSelectedCourse(null);
-    setFormData({
-      title: '',
-      description: '',
-      course_image: null,
-    });
+    setFormData({ title: '', description: '', course_image: null });
     setShowForm(true);
   };
 
@@ -166,7 +143,7 @@ const CoursePage = () => {
           <h2 className="text-2xl text-darkGray font-semibold mb-4">
             {selectedCourse ? 'Edit Course' : 'Create Course'}
           </h2>
-          <form onSubmit={selectedCourse ? handleUpdate : handleSubmit}>
+          <form onSubmit={selectedCourse ? handleUpdate : handleSubmit} encType="multipart/form-data">
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700">Title</label>
               <input
@@ -194,8 +171,9 @@ const CoursePage = () => {
               <input
                 type="file"
                 name="course_image"
-                onChange={handleInputChange}
+                onChange={handleFileChange}
                 className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                accept="image/*"
               />
             </div>
             <button
@@ -214,25 +192,22 @@ const CoursePage = () => {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {courses.map((course) => (
-          <div key={course._id} className="bg-white p-6 rounded-lg shadow-md">
-            <img
-              src={
-                imageErrors[course._id]
-                  ? '/path/to/default/image.jpg'
-                  : `${process.env.REACT_APP_API_URL}/uploads/${course.course_image}`
-              }
-              alt={course.title}
-              className="w-full h-48 object-cover rounded-md mb-4"
-              onError={() => handleImageError(course._id)}
-            />
-            <h3 className="text-xl text-darkGray font-semibold mb-2">{course.title}</h3>
-            <p className="text-gray-600 mb-4">{course.description}</p>
-            <div className="flex justify-between">
+      {Array.isArray(courses) && courses.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {courses.map((course) => (
+            <div key={course._id} className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl text-darkGray font-semibold mb-2">{course?.title || 'No title'}</h3>
+              <p className="text-gray-600 mb-4">{course?.description || 'No description'}</p>
+              {course.course_image && (
+                <img
+                  src={`${process.env.REACT_APP_API_URL}/${course.course_image}`}
+                  alt={course.title}
+                  className="mb-4 w-full h-auto rounded-md"
+                />
+              )}
               <button
                 onClick={() => handleEdit(course)}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+                className="mr-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
               >
                 Edit
               </button>
@@ -243,9 +218,11 @@ const CoursePage = () => {
                 Delete
               </button>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <p>No courses found.</p>
+      )}
     </div>
   );
 };
