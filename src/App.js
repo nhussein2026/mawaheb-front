@@ -20,6 +20,13 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Difficulties from "./pages/Difficulties";
 import AdminDashboard from "./pages/adminDashboard/AdminDashboard";
+import ScholarshipStudentForm from "./pages/scholarshipStudentPages/ScholarshipStudentForm";
+import UniversityDetails from "./pages/UniversityDetails";
+import SemesterList from "./pages/SemesterList";
+import SemesterDetails from "./pages/SemesterDetails";
+import StudentReportPage from "./pages/scholarshipStudentPages/StudentReportPage";
+import University from "./pages/scholarshipStudentPages/University";
+import StudentReportList from "./pages/scholarshipStudentPages/StudentReportList ";
 
 function App() {
   return (
@@ -40,9 +47,16 @@ function App() {
         <Route path="/student/achievements" element={<StudentAchievement />} />
         <Route path="/student/certificates" element={<StudentCertificate />} />
         <Route path="/student/difficulties" element={<Difficulties />} />
+        <Route path="/student/form" element={<ScholarshipStudentForm />} />
+        <Route path="/universityDetails" element={<UniversityDetails />} />
+        <Route path="/semester-list" element={<SemesterList />} />
+        <Route path="/semester-details" element={<SemesterDetails />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/student-report" element={<StudentReportPage />} />
+        <Route path="/my-reports" element={<StudentReportList />} />
+        <Route path="/student/university" element={<University />} />
       </Routes>
       <Footer />
     </div>

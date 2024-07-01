@@ -121,7 +121,7 @@ const DifficultyPage = () => {
       {!showForm && (
         <button
           onClick={handleAddNew}
-          className="mb-6 px-4 py-2 bg-darkGray text-white rounded-md hover:bg-gray-700"
+          className="mb-6 px-4 py-2 bg-gold text-white rounded-md hover:bg-mutedGold"
         >
           Add New Difficulty
         </button>
@@ -179,7 +179,7 @@ const DifficultyPage = () => {
               <p className="text-gray-600 mb-4">{difficulty?.description || 'No description'}</p>
               <button
                 onClick={() => handleEdit(difficulty)}
-                className="mr-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+                className="mr-4 px-4 py-2 bg-gold text-white rounded-md hover:bg-mutedGold"
               >
                 Edit
               </button>

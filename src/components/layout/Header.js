@@ -59,7 +59,7 @@ const Header = () => {
             <input
               type="text"
               placeholder="Search..."
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-secondary"
+              className="px-3 py-2 border border-gold rounded-md focus:outline-none focus:ring focus:border-gold"
             />
           </div>
           {isLoggedIn ? (
@@ -89,7 +89,7 @@ const Header = () => {
                     </NavLink>
                     {user && user.role === 'Admin' && (
                       <NavLink
-                        to="/admindashboard"
+                        to="/admin-dashboard"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
                         onClick={() => setDropdownOpen(false)}
                       >

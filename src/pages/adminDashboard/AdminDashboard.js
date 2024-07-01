@@ -1,10 +1,18 @@
 // src/pages/AdminDashboard.js
-import React from 'react';
+import React from "react";
+import Users from "./AllUsers";
 
 const AdminDashboard = () => (
   <div className="container mx-auto p-8">
-    <h2 className="text-2xl text-darkGray">Contact Us</h2>
-    <p className="mt-4 text-mediumGray">This is the contact page.</p>
+    <h1 className="text-3xl font-bold mb-4">Admin Dashboard</h1>
+    <div className="">
+      <p className="mt-4 text-mediumGray">All users</p>
+      <Users />
+    </div>
+    <div className="">
+      <p className="mt-4 text-mediumGray">All students Reports</p>
+      {/* <AllStudentR /> */}
+    </div>
   </div>
 );
 

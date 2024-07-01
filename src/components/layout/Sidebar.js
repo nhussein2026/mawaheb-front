@@ -6,7 +6,7 @@ const Sidebar = ({ userType }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const links = [
-    { to: '/student/report', label: 'Student Report' },
+    { to: '/student-report', label: 'Student Report' },
     { to: '/student/courses', label: 'Courses' },
     { to: '/student/events', label: 'Events' },
     { to: '/student/tickets', label: 'Tickets' },
@@ -14,6 +14,7 @@ const Sidebar = ({ userType }) => {
     { to: '/student/achievements', label: 'Achievements' },
     { to: '/student/certificates', label: 'Certificates' },
     { to: '/student/difficulties', label: 'difficulties' },
+    { to: '/student/university', label: 'University Records' },
   ];
 
   return (

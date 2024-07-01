@@ -1,21 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import defaultProfileImage from '../assets/images/No-profile-pic.jpg';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLinkedin, faInternetExplorer, faEdit } from '@fortawesome/free-solid-svg-icons';
+import defaultProfileImage from "../assets/images/No-profile-pic.jpg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faLinkedin,
+  faInternetExplorer,
+  faEdit,
+} from "@fortawesome/free-solid-svg-icons";
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState({
     imageUrl: "",
     name: "",
     email: "",
+    password: "",
+    bio: "",
     phone_number: "",
     date_of_birth: "",
     gender: "",
+    current_education_level: "",
     linkedin_link: "",
-    website: ""
+    website: "",
+    role: "",
   });
-
+  const [profileImage, setProfileImage] = useState(null);
   const [editMode, setEditMode] = useState(false); // State to manage edit mode
   const token = useSelector((state) => state.auth.token);
 
@@ -59,7 +67,7 @@ const ProfilePage = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/user/profile`,
+        `${process.env.REACT_APP_API_URL}/user/update-profile`,
         {
           method: "PUT",
           headers: {
@@ -87,6 +95,11 @@ const ProfilePage = () => {
     });
   };
 
+  //image change
+  const handleImageChange = (e) => {
+    setProfileImage(e.target.files[0]);
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white shadow-lg rounded-lg relative">
       {editMode && (
@@ -107,18 +120,42 @@ const ProfilePage = () => {
       )}
       <div className="flex flex-col md:flex-row items-center">
         <div className="md:w-1/3">
-          <img 
-            src={profile.imageUrl || defaultProfileImage} 
-            alt={profile.name || "Profile Image"} 
-            onError={(e) => e.target.src = defaultProfileImage} 
-            className="w-full h-auto rounded-full shadow-md" 
+          <img
+            src={profile.imageUrl || defaultProfileImage}
+            alt={profile.name || "Profile Image"}
+            onError={(e) => (e.target.src = defaultProfileImage)}
+            className="w-full h-auto rounded-full shadow-md"
           />
+           {editMode && (
+            <input 
+              type="file" 
+              accept="image/*" 
+              onChange={handleImageChange}
+              className="mt-2"
+            />
+          )}
         </div>
         <div className="md:w-2/3 mt-4 md:mt-0 md:ml-8">
           <h2 className="text-4xl text-darkGray font-semibold mb-4">
             {profile.name}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Name
+              </label>
+              {!editMode ? (
+                <p className="mt-1 text-lg text-gray-900">{profile.name}</p>
+              ) : (
+                <input
+                  type="text"
+                  name="name"
+                  value={profile.name}
+                  onChange={handleChange}
+                  className="mt-1 block w-full px-3 py-2 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                />
+              )}
+            </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Email
@@ -137,10 +174,43 @@ const ProfilePage = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              {!editMode ? (
+                <p className="mt-1 text-lg text-gray-900">••••••••</p>
+              ) : (
+                <input
+                  type="password"
+                  name="password"
+                  value={profile.password}
+                  onChange={handleChange}
+                  className="mt-1 block w-full px-3 py-2 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                />
+              )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Bio
+              </label>
+              {!editMode ? (
+                <p className="mt-1 text-lg text-gray-900">{profile.bio}</p>
+              ) : (
+                <textarea
+                  name="bio"
+                  value={profile.bio}
+                  onChange={handleChange}
+                  className="mt-1 block w-full px-3 py-2 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                />
+              )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
                 Phone Number
               </label>
               {!editMode ? (
-                <p className="mt-1 text-lg text-gray-900">{profile.phone_number}</p>
+                <p className="mt-1 text-lg text-gray-900">
+                  {profile.phone_number}
+                </p>
               ) : (
                 <input
                   type="text"
@@ -157,13 +227,19 @@ const ProfilePage = () => {
               </label>
               {!editMode ? (
                 <p className="mt-1 text-lg text-gray-900">
-                  {profile.date_of_birth ? new Date(profile.date_of_birth).toLocaleDateString() : "N/A"}
+                  {profile.date_of_birth
+                    ? new Date(profile.date_of_birth).toLocaleDateString()
+                    : "N/A"}
                 </p>
               ) : (
                 <input
                   type="date"
                   name="date_of_birth"
-                  value={profile.date_of_birth ? profile.date_of_birth.toISOString().substr(0, 10) : ""}
+                  value={
+                    profile.date_of_birth
+                      ? profile.date_of_birth.toISOString().substr(0, 10)
+                      : ""
+                  }
                   onChange={handleChange}
                   className="mt-1 block w-full px-3 py-2 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                 />
@@ -191,11 +267,29 @@ const ProfilePage = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
+                Current Education Level
+              </label>
+              {!editMode ? (
+                <p className="mt-1 text-lg text-gray-900">
+                  {profile.current_education_level}
+                </p>
+              ) : (
+                <input
+                  type="text"
+                  name="current_education_level"
+                  value={profile.current_education_level}
+                  onChange={handleChange}
+                  className="mt-1 block w-full px-3 py-2 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                />
+              )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
                 LinkedIn
               </label>
               {!editMode ? (
                 <a
-                  href={profile.linkedin_link}
+                  href={`https://www.linkedin.com/in/nhussein2026/{profile.linkedin_link}`}
                   className="mt-1 text-lg text-blue-600"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -230,6 +324,25 @@ const ProfilePage = () => {
                   type="text"
                   name="website"
                   value={profile.website}
+                  onChange={handleChange}
+                  className="mt-1 block w-full px-3 py-2 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                />
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                User Role
+              </label>
+              {!editMode ? (
+                <p className="mt-1 text-lg text-gray-900">
+                  {profile.role}
+                </p>
+              ) : (
+                <input
+                  type="text"
+                  name="role"
+                  value={profile.role}
                   onChange={handleChange}
                   className="mt-1 block w-full px-3 py-2 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                 />

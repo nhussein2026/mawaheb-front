@@ -171,12 +171,12 @@ const Certificate = () => {
     setShowForm(true);
   };
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 mb-11">
       <h1 className="text-4xl text-darkGray font-bold mb-6">Certificates</h1>
       {error && <p className="text-red-500 mb-4">{error}</p>}
       <button
         onClick={handleAddNew}
-        className="px-4 py-2 mb-6 bg-darkGray text-white rounded-md hover:bg-gray-700"
+        className="px-4 py-2 mb-6 bg-gold text-white rounded-md hover:bg-mutedGold"
       >
         Add New Certificate
       </button>
@@ -285,7 +285,7 @@ const Certificate = () => {
             <div className="flex justify-between">
               <button
                 onClick={() => handleEdit(certificate)}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+                className="px-4 py-2 bg-gold text-white rounded-md hover:bg-mutedGold"
               >
                 Edit
               </button>

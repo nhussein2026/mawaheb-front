@@ -8,7 +8,6 @@ const Register = () => {
     email: "",
     password: "",
   });
-
   const [showModal, setShowModal] = useState(false); // State for showing/hiding the modal
   const [modalMessage, setModalMessage] = useState(""); // State for the modal message
   const [registrationSuccess, setRegistrationSuccess] = useState(false); // State for tracking registration success
@@ -125,7 +124,7 @@ const Register = () => {
       {showModal && (
         <PopupModal
           message={modalMessage}
-          type={modalMessage.includes("success") ? "success" : "failed"}
+          type={typeof modalMessage === 'string' && modalMessage.includes("success") ? "success" : "failed"}
           button1={registrationSuccess}
           onClose={() => setShowModal(false)}
         />

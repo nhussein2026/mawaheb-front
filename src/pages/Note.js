@@ -129,7 +129,7 @@ const NotePage = () => {
       {!showForm && (
         <button
           onClick={handleAddNew}
-          className="mb-6 px-4 py-2 bg-darkGray text-white rounded-md hover:bg-gray-700"
+          className="mb-6 px-4 py-2 bg-gold text-white rounded-md hover:bg-mutedGold"
         >
           Add New Note
         </button>
@@ -188,7 +188,7 @@ const NotePage = () => {
               <div className="flex justify-between">
                 <button
                   onClick={() => handleEdit(note)}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+                  className="px-4 py-2 bg-gold text-white rounded-md hover:bg-mutedGold"
                 >
                   Edit
                 </button>

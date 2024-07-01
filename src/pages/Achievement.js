@@ -123,14 +123,14 @@ const UserAchievementPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 mb-11">
       <h1 className="text-4xl text-darkGray font-bold mb-6">User Achievements</h1>
       {error && <p className="text-red-500 mb-4">{error}</p>}
 
       {!showForm && (
         <button
           onClick={handleAddNew}
-          className="mb-6 px-4 py-2 bg-darkGray text-white rounded-md hover:bg-gray-700"
+          className="mb-6 px-4 py-2 bg-gold text-white rounded-md hover:bg-mutedGold"
         >
           Add New Achievement
         </button>
@@ -219,7 +219,7 @@ const UserAchievementPage = () => {
               <div className="flex justify-between">
                 <button
                   onClick={() => handleEdit(achievement)}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+                  className="px-4 py-2 bg-gold text-white rounded-md hover:bg-mutedGold"
                 >
                   Edit
                 </button>
